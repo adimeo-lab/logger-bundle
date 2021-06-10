@@ -3,6 +3,8 @@
 namespace Adimeo\Logger\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class AbstractLog
@@ -33,7 +35,7 @@ abstract class AbstractLog
      *
      * @Groups({"logger"})
      */
-    protected string $user;
+    protected $user;
 
     /**
      * @var string $entity

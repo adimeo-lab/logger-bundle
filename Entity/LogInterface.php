@@ -1,10 +1,10 @@
 <?php
 
-namespace Adimeo\Notifications\Entity;
+namespace Adimeo\Logger\Entity;
 
 /**
  * Interface LogInterface
- * @package Adimeo\Notifications\Entity
+ * @package Adimeo\Logger\Entity
  */
 interface LogInterface
 {
