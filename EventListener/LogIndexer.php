@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Adimeo\Logger\EventListener;
 
 use Doctrine\Common\EventSubscriber;

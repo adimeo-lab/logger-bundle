@@ -3,7 +3,7 @@ services:
     autowire: true
     autoconfigure: true
 
-  App\EventListener\LogIndexer:
+  Adimeo\Logger\EventListener\LogIndexer:
     tags:
       - name: 'doctrine.event_listener'
         # this is the only required option for the lifecycle listener tag
