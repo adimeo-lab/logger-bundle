@@ -16,5 +16,5 @@ interface LogInterface
     /**
      * @return string
      */
-    public static function getTargetedEntity(): string;
+    public static function getTargetedUserEntity(): string;
 }
