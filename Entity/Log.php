@@ -2,15 +2,18 @@
 
 namespace Adimeo\Logger\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Class AbstractLog
- * @package Adimeo\Logger\Entity
+ * Class UserNotification
+ * @package App\Entity
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="entity_logs")
  */
-abstract class AbstractLog
+class Log
 {
     const EVENT_CREATION = 1;
     const EVENT_EDITION  = 2;
@@ -31,7 +34,7 @@ abstract class AbstractLog
     /**
      * @var string $user
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=true, name="userId")
      *
      * @Groups({"logger"})
      */
@@ -85,7 +88,7 @@ abstract class AbstractLog
     /**
      * AbstractLog constructor.
      */
-    public function __construct(UserInterface $user, array $content)
+    public function __construct(?string $user, array $content)
     {
         $this->date = new \DateTime();
         $this->user = $user;
@@ -102,9 +105,9 @@ abstract class AbstractLog
 
     /**
      * @param string $id
-     * @return AbstractLog
+     * @return Log
      */
-    public function setId(string $id): AbstractLog
+    public function setId(string $id): Log
     {
         $this->id = $id;
         return $this;
@@ -113,16 +116,16 @@ abstract class AbstractLog
     /**
      * @return string
      */
-    public function getUser(): UserInterface|string
+    public function getUser(): string
     {
         return $this->user;
     }
 
     /**
      * @param string $user
-     * @return AbstractLog
+     * @return Log
      */
-    public function setUser(UserInterface|string $user): AbstractLog
+    public function setUser(string $user): Log
     {
         $this->user = $user;
         return $this;
@@ -138,9 +141,9 @@ abstract class AbstractLog
 
     /**
      * @param string $entity
-     * @return AbstractLog
+     * @return Log
      */
-    public function setEntity(string $entity): AbstractLog
+    public function setEntity(string $entity): Log
     {
         $this->entity = $entity;
         return $this;
@@ -156,9 +159,9 @@ abstract class AbstractLog
 
     /**
      * @param string $entityId
-     * @return AbstractLog
+     * @return Log
      */
-    public function setEntityId(string $entityId): AbstractLog
+    public function setEntityId(string $entityId): Log
     {
         $this->entityId = $entityId;
         return $this;
@@ -174,9 +177,9 @@ abstract class AbstractLog
 
     /**
      * @param int $event
-     * @return AbstractLog
+     * @return Log
      */
-    public function setEvent(int $event): AbstractLog
+    public function setEvent(int $event): Log
     {
         $this->event = $event;
         return $this;
@@ -192,9 +195,9 @@ abstract class AbstractLog
 
     /**
      * @param array $content
-     * @return AbstractLog
+     * @return Log
      */
-    public function setContent(array $content): AbstractLog
+    public function setContent(array $content): Log
     {
         $this->content = $content;
         return $this;
@@ -210,9 +213,9 @@ abstract class AbstractLog
 
     /**
      * @param \DateTime $date
-     * @return AbstractLog
+     * @return Log
      */
-    public function setDate(\DateTime $date): AbstractLog
+    public function setDate(\DateTime $date): Log
     {
         $this->date = $date;
         return $this;

@@ -18,10 +18,12 @@
         "ramsey/uuid-doctrine": "^1.6",
         "symfony/dependency-injection": "^5.3",
         "symfony/config": "^5.3",
-        "babdev/pagerfanta-bundle": "^3.2"
+        "babdev/pagerfanta-bundle": "^3.2",
+        "symfony/serializer": "^5.3"
     },
     "require-dev": {
         "doctrine/orm": "^2.9",
-        "symfony/security-bundle": "^5.3"
+        "symfony/security-bundle": "^5.3",
+        "elasticsearch/elasticsearch": "^7.13"
     }
 }
