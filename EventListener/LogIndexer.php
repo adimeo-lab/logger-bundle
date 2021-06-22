@@ -2,9 +2,10 @@
 
 namespace Adimeo\Logger\EventListener;
 
-use Adimeo\Logger\Entity\Log;
+use Adimeo\Logger\Entity\AbstractLog;
 use Adimeo\Logger\Entity\LoggedEntity;
 use Adimeo\Logger\Services\LogManager;
+use Adimeo\Logger\Services\LogManagerInterface;
 use App\Entity\Logger;
 use App\Event\User\UserDocumentRefusedEvent;
 use Doctrine\Common\EventSubscriber;
@@ -52,7 +53,7 @@ class LogIndexer implements EventSubscriber
      */
     public function __construct(
         Security $security,
-        LogManager $logManager,
+        LogManagerInterface $logManager,
         EventDispatcherInterface $dispatcher
     ) {
         $this->security = $security;
@@ -79,22 +80,22 @@ class LogIndexer implements EventSubscriber
 
         // Inserted entities
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
-            $payload = $this->serializer->normalize($entity);
+            $payload = ['payload' => $this->serializer->normalize($entity)];
 
-            $this->logManager->create($entity, $payload, Log::EVENT_CREATION);
+            $this->logManager->create($entity, null, $payload, AbstractLog::EVENT_CREATION);
         }
 
         // Updated entities
         foreach ($uow->getScheduledEntityUpdates() as $entity) {
-            $payload = $uow->getEntityChangeSet($entity);
+            $payload = ['payload' => $uow->getEntityChangeSet($entity)];
 
-            $this->logManager->create($entity, $payload, Log::EVENT_EDITION);
+            $this->logManager->create($entity, null, $payload, AbstractLog::EVENT_EDITION);
         }
 
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
-            $payload = $this->serializer->normalize($entity);
+            $payload = ['payload' => $this->serializer->normalize($entity)];
 
-            $this->logManager->create($entity, $payload, Log::EVENT_DELETION);
+            $this->logManager->create($entity, null, $payload, AbstractLog::EVENT_DELETION);
         }
     }
 }

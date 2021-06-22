@@ -4,8 +4,8 @@
     "type": "symfony-bundle",
     "authors": [
         {
-            "name": "Sevj",
-            "email": "sevjeh@sevjeh.com"
+            "name": "Jordan",
+            "email": "jheussler@adimeo.com"
         }
     ],
     "autoload": {

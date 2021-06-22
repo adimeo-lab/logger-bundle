@@ -8,5 +8,4 @@ namespace Adimeo\Logger\Entity;
  */
 interface LoggedEntity
 {
-
 }

@@ -3,18 +3,33 @@ services:
     autowire: true
     autoconfigure: true
 
-  Adimeo\Logger\Services\LogManager:
+  als.doctrine.repository:
+    class: Adimeo\Logger\Repository\DoctrineLogRepository
     arguments:
-      - '%env(ALS_ENABLED_DEV)%'
-      - '%env(ALS_ELS_HOST)%'
-      - '%env(ALS_ELS_INDEX)%'
-      - '%env(APP_ENV)%'
+      - '@Doctrine\Persistence\ManagerRegistry'
+      - '%env(resolve:ALS_ENTITY)%'
+
+  als.els.repository:
+    class: Adimeo\Logger\Repository\ElsLogRepository
+    arguments:
+      - '%env(resolve:ALS_ELS_HOST)%'
+      - '%env(resolve:ALS_ELS_INDEX)%'
+      - '%env(resolve:ALS_ENTITY)%'
+
+  als.manager:
+    class: Adimeo\Logger\Services\LogManager
+    arguments:
+      - '@als.doctrine.repository'
+      - '%env(resolve:ALS_ENABLED_DEV)%'
+      - '%env(resolve:APP_ENV)%'
+
+  Adimeo\Logger\Services\LogManager: '@als.manager'
 
   Adimeo\Logger\EventListener\LogIndexer:
     arguments:
-        - '@Symfony\Component\Security\Core\Security'
-        - '@Adimeo\Logger\Services\LogManager'
-        - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
+      - '@Symfony\Component\Security\Core\Security'
+      - '@als.manager'
+      - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
 
     tags:
       - { name: doctrine.event_listener, event: onFlush }

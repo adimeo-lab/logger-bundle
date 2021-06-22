@@ -2,40 +2,50 @@
 
 namespace Adimeo\Logger\Repository;
 
+use Adimeo\Logger\Entity\AbstractDoctrineLog;
+use Adimeo\Logger\Entity\AbstractLog;
 use Adimeo\Logger\Entity\Log;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Class DoctrineLogRepository
  * @package Adimeo\Logger\Repository
  */
-class DoctrineLogRepository implements LogRepository
+class DoctrineLogRepository extends ServiceEntityRepository implements LogRepositoryInterface
 {
     /** @var EntityManagerInterface  */
-    protected $em;
 
     /**
      * DoctrineLogRepository constructor.
-     * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(ManagerRegistry $registry, string $class)
     {
-        $this->em = $em;
+        parent::__construct($registry, $class);
     }
 
     /**
-     * @param Log $log
+     * @param AbstractDoctrineLog $log
      */
-    public function create(Log $log)
+    public function create($log)
     {
-        $this->em->persist($log);
+        $this->_em->persist($log);
 
-        $classMetadata = $this->em->getClassMetadata(Log::class);
-        $this->em->getUnitOfWork()->computeChangeSet($classMetadata, $log);
+        $classMetadata = $this->_em->getClassMetadata(get_class($log));
+        $this->_em->getUnitOfWork()->computeChangeSet($classMetadata, $log);
     }
 
-    public function fetch(int $page, array $filters)
+    public function fetch(int $page = 1, int $limit = 50, array $filters = [])
     {
-        // TODO: Implement fetch() method.
+        $queryBuilder = $this
+            ->createQueryBuilder('l');
+
+        $queryBuilder->orderBy('l.date', 'DESC');
+
+        $paginator = new Paginator($queryBuilder);
+
+        return $paginator;
     }
 }
